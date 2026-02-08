@@ -1,5 +1,22 @@
 import streamlit as st
 import time
+st.markdown("""
+<style>
+/* Agrandar botones al doble */
+div.stButton > button {
+    font-size: 24px;
+    padding: 20px 40px;
+    border-radius: 16px;
+    width: 100%;
+}
+
+/* Contenedor centrado */
+.button-container {
+    max-width: 420px;
+    margin: auto;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
