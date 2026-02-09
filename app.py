@@ -1,91 +1,124 @@
 import streamlit as st
+import base64
 
 st.set_page_config(page_title="VERITAS AI", layout="wide", initial_sidebar_state="collapsed")
 
 BACKGROUND_URL = "https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verification_Engine_IMAGEN.png"
 
+# CSS simplificado
 st.markdown(f"""
 <style>
 .stApp {{
     background-image: url("{BACKGROUND_URL}");
-    background-size: cover;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
     background-position: center;
 }}
-#MainMenu, footer, header {{display: none;}}
+[data-testid="stAppViewContainer"] {{
+    background: transparent;
+}}
 </style>
 """, unsafe_allow_html=True)
 
-# POSICIONES DE LOS BOTONES (top, left)
-positions = {
-    'text': ('📝 TEXT / EMAIL', '18%', '60%'),
-    'url': ('🔗 URL / LINK', '18%', '22%'),
-    'image': ('🖼️ IMAGE', '42%', '18%'),
-    'video': ('🎥 VIDEO', '55%', '50%'),
-    'audio': ('🔊 AUDIO', '42%', '64%')
+# Estado
+if 'uploader' not in st.session_state:
+    st.session_state.uploader = None
+
+# Botones con st.columns
+cols = st.columns(5)
+
+with cols[0]:
+    if st.button("📝 TEXT", use_container_width=True, key="btn1"):
+        st.session_state.uploader = "text"
+with cols[1]:
+    if st.button("🔗 URL", use_container_width=True, key="btn2"):
+        st.session_state.uploader = "url"
+with cols[2]:
+    if st.button("🖼️ IMAGE", use_container_width=True, key="btn3"):
+        st.session_state.uploader = "image"
+with cols[3]:
+    if st.button("🎥 VIDEO", use_container_width=True, key="btn4"):
+        st.session_state.uploader = "video"
+with cols[4]:
+    if st.button("🔊 AUDIO", use_container_width=True, key="btn5"):
+        st.session_state.uploader = "audio"
+
+# Uploaders
+if st.session_state.uploader == "text":
+    st.markdown("### 📝 TEXT/EMAIL")
+    text = st.text_area("Paste text:")
+    file = st.file_uploader("Or upload file:", type=["txt", "pdf"])
+    if st.button("Verify"):
+        st.write("Verifying...")
+    if st.button("Close"):
+        st.session_state.uploader = None
+
+elif st.session_state.uploader == "url":
+    st.markdown("### 🔗 URL/LINK")
+    url = st.text_input("Enter URL:")
+    if st.button("Verify"):
+        st.write("Verifying...")
+    if st.button("Close"):
+        st.session_state.uploader = None
+
+elif st.session_state.uploader == "image":
+    st.markdown("### 🖼️ IMAGE")
+    img = st.file_uploader("Upload image:", type=["jpg", "png"])
+    if st.button("Verify"):
+        st.write("Verifying...")
+    if st.button("Close"):
+        st.session_state.uploader = None
+
+elif st.session_state.uploader == "video":
+    st.markdown("### 🎥 VIDEO")
+    vid = st.file_uploader("Upload video:", type=["mp4", "mov"])
+    if st.button("Verify"):
+        st.write("Verifying...")
+    if st.button("Close"):
+        st.session_state.uploader = None
+
+elif st.session_state.uploader == "audio":
+    st.markdown("### 🔊 AUDIO")
+    aud = st.file_uploader("Upload audio:", type=["mp3", "wav"])
+    if st.button("Verify"):
+        st.write("Verifying...")
+    if st.button("Close"):
+        st.session_state.uploader = None
+
+# CSS para posicionar botones sobre la imagen
+st.markdown("""
+<style>
+div[data-testid="column"] {
+    position: absolute !important;
 }
-
-# MOSTRAR BOTONES CON HTML
-button_html = """
-<div style="position: relative; width: 100vw; height: 100vh;">
-"""
-for key, (label, top, left) in positions.items():
-    button_html += f"""
-    <div style="position: absolute; top: {top}; left: {left}; transform: translateX(-50%);">
-        <form id="form_{key}">
-            <input type="hidden" name="action" value="{key}">
-            <button type="submit" style="
-                min-width: 220px;
-                padding: 22px 26px;
-                background: rgba(0,0,0,0.65);
-                border: 2px solid #00ffff;
-                border-radius: 14px;
-                color: #00ffff;
-                font-size: 28px;
-                font-weight: 600;
-                box-shadow: 0 0 18px rgba(0,255,255,0.35);
-                cursor: pointer;
-                transition: all 0.25s ease-in-out;
-            " 
-            onmouseover="this.style.background='#00ffff'; this.style.color='#000'; this.style.boxShadow='0 0 28px #00ffff'; this.style.transform='scale(1.05)'"
-            onmouseout="this.style.background='rgba(0,0,0,0.65)'; this.style.color='#00ffff'; this.style.boxShadow='0 0 18px rgba(0,255,255,0.35)'; this.style.transform='scale(1)'">
-                {label}
-            </button>
-        </form>
-    </div>
-    """
-button_html += "</div>"
-
-st.markdown(button_html, unsafe_allow_html=True)
-
-# MANEJAR CLICS DE BOTONES
-if 'action' in st.query_params:
-    action = st.query_params['action']
-    st.session_state.current_uploader = action
-
-# SUBIR ARCHIVOS
-if 'current_uploader' in st.session_state:
-    if st.session_state.current_uploader == 'text':
-        st.header("📝 TEXT / EMAIL VERIFICATION")
-        st.text_area("Paste text or email:", height=150)
-        st.file_uploader("Upload file:", type=["txt", "eml"])
-        if st.button("Close"): st.session_state.current_uploader = None
-        
-    elif st.session_state.current_uploader == 'url':
-        st.header("🔗 URL / LINK VERIFICATION")
-        st.text_input("Enter URL:")
-        if st.button("Close"): st.session_state.current_uploader = None
-        
-    elif st.session_state.current_uploader == 'image':
-        st.header("🖼️ IMAGE VERIFICATION")
-        st.file_uploader("Upload image:", type=["jpg", "png"])
-        if st.button("Close"): st.session_state.current_uploader = None
-        
-    elif st.session_state.current_uploader == 'video':
-        st.header("🎥 VIDEO VERIFICATION")
-        st.file_uploader("Upload video:", type=["mp4", "avi"])
-        if st.button("Close"): st.session_state.current_uploader = None
-        
-    elif st.session_state.current_uploader == 'audio':
-        st.header("🔊 AUDIO VERIFICATION")
-        st.file_uploader("Upload audio:", type=["mp3", "wav"])
-        if st.button("Close"): st.session_state.current_uploader = None
+div[data-testid="column"]:nth-child(1) {
+    top: 18% !important;
+    left: 60% !important;
+}
+div[data-testid="column"]:nth-child(2) {
+    top: 18% !important;
+    left: 22% !important;
+}
+div[data-testid="column"]:nth-child(3) {
+    top: 42% !important;
+    left: 18% !important;
+}
+div[data-testid="column"]:nth-child(4) {
+    top: 55% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+div[data-testid="column"]:nth-child(5) {
+    top: 42% !important;
+    left: 64% !important;
+}
+.stButton > button {
+    width: 220px !important;
+    height: 80px !important;
+    background: rgba(0,0,0,0.7) !important;
+    border: 2px solid #00ffff !important;
+    color: #00ffff !important;
+    font-size: 20px !important;
+}
+</style>
+""", unsafe_allow_html=True)
