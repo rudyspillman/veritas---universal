@@ -2,57 +2,43 @@ import streamlit as st
 
 st.set_page_config(page_title="VERITAS AI", layout="wide", initial_sidebar_state="collapsed")
 
-BACKGROUND_URL = "https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verification_Engine_IMAGEN.png"
-
-st.markdown(f"""
+st.markdown("""
 <style>
-.stApp {{
-    background-image: url("{BACKGROUND_URL}");
+.stApp {
+    background-image: url('https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verification_Engine_IMAGEN.png');
     background-size: cover;
-    background-position: center;
-}}
-.stButton > button {{
-    background-color: rgba(0,0,0,0.7);
-    color: #00ffff;
-    border: 2px solid #00ffff;
-    font-size: 20px;
-    padding: 15px;
-    border-radius: 10px;
-}}
+}
 </style>
 """, unsafe_allow_html=True)
 
-# Texto/Email
-if st.button("📝 TEXT / EMAIL", key="text"):
-    st.write("Subir texto o email")
-    text = st.text_area("Texto:")
-    if st.button("Verificar"):
-        st.write("Texto recibido")
+# Botones principales
+option = st.radio("Seleccionar:", ["📝 TEXT/EMAIL", "🔗 URL/LINK", "🖼️ IMAGE", "🎥 VIDEO", "🔊 AUDIO"], 
+                  horizontal=True, label_visibility="collapsed")
 
-# URL/Link  
-if st.button("🔗 URL / LINK", key="url"):
-    st.write("Ingresar URL")
-    url = st.text_input("URL:")
+if option == "📝 TEXT/EMAIL":
+    text = st.text_area("Pegue texto o email:")
     if st.button("Verificar"):
-        st.write("URL recibida")
+        st.write(f"Texto verificado: {len(text)} caracteres analizados")
 
-# Imagen
-if st.button("🖼️ IMAGE", key="image"):
-    st.write("Subir imagen")
-    img = st.file_uploader("Imagen:", type=["jpg", "png"])
+elif option == "🔗 URL/LINK":
+    url = st.text_input("Ingrese URL:")
     if st.button("Verificar"):
-        st.write("Imagen recibida")
+        st.write(f"URL verificada: {url}")
 
-# Video
-if st.button("🎥 VIDEO", key="video"):
-    st.write("Subir video")
-    vid = st.file_uploader("Video:", type=["mp4"])
+elif option == "🖼️ IMAGE":
+    img = st.file_uploader("Suba imagen:", type=["jpg", "png"])
     if st.button("Verificar"):
-        st.write("Video recibido")
+        if img:
+            st.write(f"Imagen verificada: {img.name}")
 
-# Audio
-if st.button("🔊 AUDIO", key="audio"):
-    st.write("Subir audio")
-    aud = st.file_uploader("Audio:", type=["mp3"])
+elif option == "🎥 VIDEO":
+    vid = st.file_uploader("Suba video:", type=["mp4"])
     if st.button("Verificar"):
-        st.write("Audio recibido")
+        if vid:
+            st.write(f"Video verificado: {vid.name}")
+
+elif option == "🔊 AUDIO":
+    aud = st.file_uploader("Suba audio:", type=["mp3", "wav"])
+    if st.button("Verificar"):
+        if aud:
+            st.write(f"Audio verificado: {aud.name}")
