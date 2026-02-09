@@ -1,86 +1,109 @@
 import streamlit as st
-import time
 
-# ---------------- PAGE CONFIG ----------------
+# =========================
+# CONFIGURACIÓN GENERAL
+# =========================
 st.set_page_config(
     page_title="VERITAS AI — Universal Verification Engine",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ---------------- GLOBAL STYLES ----------------
-background_url = "https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verification_Engine_IMAGEN.png"
+# =========================
+# CSS GLOBAL
+# =========================
+BACKGROUND_URL = "https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verification_Engine_IMAGEN.png"
 
 st.markdown(f"""
 <style>
 /* Fondo */
 .stApp {{
-    background-image: url("{background_url}");
+    background-image: url("{BACKGROUND_URL}");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
 }}
 
-/* Ocultar UI Streamlit */
-#MainMenu {{visibility: hidden;}}
-footer {{visibility: hidden;}}
-header {{visibility: hidden;}}
+/* Ocultar elementos Streamlit */
+#MainMenu, footer, header {{
+    visibility: hidden;
+}}
 
-/* Capa UI */
-.ui-layer {{
+/* Contenedor overlay absoluto */
+.overlay {{
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 90vh;
 }}
 
-/* Botones */
+/* Botones flotantes */
 .btn {{
     position: absolute;
-    padding: 20px 36px;
+    min-width: 220px;
+    padding: 22px 26px;
+    background: rgba(0,0,0,0.65);
+    border: 2px solid #00ffff;
+    border-radius: 14px;
+    color: #00ffff;
     font-size: 28px;
     font-weight: 600;
-    color: #00ffff;
-    border: 2px solid #00ffff;
-    border-radius: 18px;
-    background: rgba(0,0,0,0.7);
-    cursor: pointer;
     text-align: center;
-    white-space: nowrap;
-    box-shadow: 0 0 14px rgba(0,255,255,0.35);
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(0,255,255,0.35);
+    transition: all 0.25s ease-in-out;
 }}
+
 .btn:hover {{
     background: #00ffff;
     color: #000;
+    box-shadow: 0 0 28px #00ffff;
+    transform: scale(1.05);
 }}
 
-/* POSICIONES SIMÉTRICAS */
+/* POSICIONAMIENTO SIMÉTRICO */
 
-/* Izquierda */
-.image {{ top: 24%; left: 8%; }}
-.audio {{ top: 44%; left: 8%; }}
+/* TEXT / EMAIL (arriba derecha, alineado al haz vertical) */
+#text {{
+    top: 18%;
+    left: 60%;
+}}
 
-/* Derecha */
-.text  {{ top: 24%; right: 8%; }}
-.url   {{ top: 44%; right: 8%; }}
+/* URL / LINK (arriba izquierda, misma distancia espejo) */
+#url {{
+    top: 18%;
+    left: 22%;
+}}
 
-/* Centro */
-.video {{
-    top: 56%;
+/* IMAGE (centro izquierda) */
+#image {{
+    top: 42%;
+    left: 18%;
+}}
+
+/* VIDEO (centro inferior, alineado al eje) */
+#video {{
+    top: 55%;
     left: 50%;
     transform: translateX(-50%);
+}}
+
+/* AUDIO (centro derecha, más cerca del eje) */
+#audio {{
+    top: 42%;
+    left: 64%;
 }}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- UI ----------------
+# =========================
+# OVERLAY DE BOTONES
+# =========================
 st.markdown("""
-<div class="ui-layer">
-    <div class="btn image">🖼️ IMAGE</div>
-    <div class="btn audio">🔊 AUDIO</div>
-
-    <div class="btn text">📝 TEXT / EMAIL</div>
-    <div class="btn url">🔗 URL / LINK</div>
-
-    <div class="btn video">🎥 VIDEO</div>
+<div class="overlay">
+    <div class="btn" id="text">📝 TEXT / EMAIL</div>
+    <div class="btn" id="url">🔗 URL / LINK</div>
+    <div class="btn" id="image">🖼️ IMAGE</div>
+    <div class="btn" id="video">🎥 VIDEO</div>
+    <div class="btn" id="audio">🔊 AUDIO</div>
 </div>
 """, unsafe_allow_html=True)
