@@ -16,7 +16,6 @@ BACKGROUND_URL = "https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verificatio
 
 st.markdown(f"""
 <style>
-/* Fondo */
 .stApp {{
     background-image: url("{BACKGROUND_URL}");
     background-size: cover;
@@ -24,19 +23,16 @@ st.markdown(f"""
     background-attachment: fixed;
 }}
 
-/* Ocultar elementos Streamlit */
 #MainMenu, footer, header {{
     visibility: hidden;
 }}
 
-/* Contenedor overlay absoluto */
 .overlay {{
     position: relative;
     width: 100%;
     height: 90vh;
 }}
 
-/* Botones flotantes */
 .btn {{
     position: absolute;
     min-width: 220px;
@@ -51,6 +47,8 @@ st.markdown(f"""
     cursor: pointer;
     box-shadow: 0 0 18px rgba(0,255,255,0.35);
     transition: all 0.25s ease-in-out;
+    text-decoration: none;
+    display: inline-block;
 }}
 
 .btn:hover {{
@@ -60,52 +58,27 @@ st.markdown(f"""
     transform: scale(1.05);
 }}
 
-/* POSICIONAMIENTO SIMÉTRICO */
-
-/* TEXT / EMAIL (arriba derecha, alineado al haz vertical) */
-#text {{
-    top: 18%;
-    left: 60%;
-}}
-
-/* URL / LINK (arriba izquierda, misma distancia espejo) */
-#url {{
-    top: 18%;
-    left: 22%;
-}}
-
-/* IMAGE (centro izquierda) */
-#image {{
-    top: 42%;
-    left: 18%;
-}}
-
-/* VIDEO (centro inferior, alineado al eje) */
-#video {{
-    top: 55%;
-    left: 50%;
-    transform: translateX(-50%);
-}}
-
-/* AUDIO (centro derecha, más cerca del eje) */
-#audio {{
-    top: 42%;
-    left: 64%;
-}}
+/* POSICIONES */
+#text {{ top: 18%; left: 60%; }}
+#url {{ top: 18%; left: 22%; }}
+#image {{ top: 42%; left: 18%; }}
+#video {{ top: 55%; left: 50%; transform: translateX(-50%); }}
+#audio {{ top: 42%; left: 64%; }}
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# OVERLAY DE BOTONES
+# BOTONES FUNCIONALES
 # =========================
 st.markdown("""
 <div class="overlay">
-    <div class="btn" id="text">📝 TEXT / EMAIL</div>
-    <div class="btn" id="url">🔗 URL / LINK</div>
-    <div class="btn" id="image">🖼️ IMAGE</div>
-    <div class="btn" id="video">🎥 VIDEO</div>
-    <div class="btn" id="audio">🔊 AUDIO</div>
+    <a href="/?mode=text" class="btn" id="text">📝 TEXT / EMAIL</a>
+    <a href="/?mode=url" class="btn" id="url">🔗 URL / LINK</a>
+    <a href="/?mode=image" class="btn" id="image">🖼️ IMAGE</a>
+    <a href="/?mode=video" class="btn" id="video">🎥 VIDEO</a>
+    <a href="/?mode=audio" class="btn" id="audio">🔊 AUDIO</a>
 </div>
 """, unsafe_allow_html=True)
+
 
 
