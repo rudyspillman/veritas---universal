@@ -29,127 +29,234 @@ st.markdown(f"""
     visibility: hidden;
 }}
 
-/* Contenedor para los botones */
-.button-container {{
+/* Contenedor overlay absoluto */
+.overlay {{
     position: relative;
     width: 100%;
     height: 90vh;
 }}
 
-/* Estilos para los botones de Streamlit */
-.stButton > button {{
-    position: absolute !important;
-    min-width: 220px !important;
-    padding: 22px 26px !important;
-    background: rgba(0,0,0,0.65) !important;
-    border: 2px solid #00ffff !important;
-    border-radius: 14px !important;
-    color: #00ffff !important;
-    font-size: 28px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 0 18px rgba(0,255,255,0.35) !important;
-    transition: all 0.25s ease-in-out !important;
+/* Botones flotantes */
+.upload-btn {{
+    position: absolute;
+    min-width: 220px;
+    padding: 22px 26px;
+    background: rgba(0,0,0,0.65);
+    border: 2px solid #00ffff;
+    border-radius: 14px;
+    color: #00ffff;
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(0,255,255,0.35);
+    transition: all 0.25s ease-in-out;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }}
 
-.stButton > button:hover {{
-    background: #00ffff !important;
-    color: #000 !important;
-    box-shadow: 0 0 28px #00ffff !important;
-    transform: scale(1.05) !important;
+.upload-btn:hover {{
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 28px #00ffff;
+    transform: scale(1.05);
 }}
 
-/* POSICIONAMIENTO DE LOS BOTONES */
-/* TEXT / EMAIL */
-#text-btn {{
-    top: 18% !important;
-    left: 60% !important;
+/* POSICIONAMIENTO SIMÉTRICO */
+.btn-text {{
+    top: 18%;
+    left: 60%;
 }}
 
-/* URL / LINK */
-#url-btn {{
-    top: 18% !important;
-    left: 22% !important;
+.btn-url {{
+    top: 18%;
+    left: 22%;
 }}
 
-/* IMAGE */
-#image-btn {{
-    top: 42% !important;
-    left: 18% !important;
+.btn-image {{
+    top: 42%;
+    left: 18%;
 }}
 
-/* VIDEO */
-#video-btn {{
-    top: 55% !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+.btn-video {{
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
 }}
 
-/* AUDIO */
-#audio-btn {{
-    top: 42% !important;
-    left: 64% !important;
+.btn-audio {{
+    top: 42%;
+    left: 64%;
+}}
+
+/* Estilos para los uploaders */
+.uploader-container {{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 30px rgba(0,255,255,0.5);
+    z-index: 2000;
+    min-width: 400px;
+    display: none;
+}}
+
+.uploader-container.active {{
+    display: block;
+}}
+
+.close-btn {{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #00ffff;
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    z-index: 2001;
+}}
+
+.overlay-bg {{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1999;
+    display: none;
+}}
+
+.overlay-bg.active {{
+    display: block;
 }}
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# FUNCIONES PARA CADA BOTÓN
+# JAVASCRIPT PARA LOS BOTONES
 # =========================
-def handle_text():
-    st.session_state['selected'] = 'text'
-    # Aquí puedes redirigir o mostrar contenido diferente
-
-def handle_url():
-    st.session_state['selected'] = 'url'
-
-def handle_image():
-    st.session_state['selected'] = 'image'
-
-def handle_video():
-    st.session_state['selected'] = 'video'
-
-def handle_audio():
-    st.session_state['selected'] = 'audio'
-
-# =========================
-# BOTONES CON STREAMLIT
-# =========================
-col1, col2, col3 = st.columns([1, 1, 1])
-
-with col1:
-    # Botones posicionados con CSS
-    st.markdown('<div class="button-container">', unsafe_allow_html=True)
-    
-    # Botón TEXT/EMAIL
-    if st.button('📝 TEXT / EMAIL', key='text', help="Verificar texto o email"):
-        handle_text()
-    
-    # Botón URL/LINK  
-    if st.button('🔗 URL / LINK', key='url', help="Verificar enlace web"):
-        handle_url()
-        
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# Agrega más columnas para los otros botones si es necesario
-# O usa un contenedor absoluto con CSS
-
-# Para un enfoque más simple, puedes usar este método:
 st.markdown("""
-<div style='position: relative; height: 90vh;'>
-    <div style='position: absolute; top: 18%; left: 60%;'>
-        <a href='https://tuejemplo.com/text' style='
-            display: inline-block;
-            padding: 22px 26px;
-            background: rgba(0,0,0,0.65);
-            border: 2px solid #00ffff;
-            border-radius: 14px;
-            color: #00ffff;
-            font-size: 28px;
-            font-weight: 600;
-            text-decoration: none;
-            box-shadow: 0 0 18px rgba(0,255,255,0.35);
-            transition: all 0.25s ease-in-out;
-        '>📝 TEXT / EMAIL</a>
-    </div>
+<script>
+function showUploader(type) {
+    document.getElementById('overlay-bg').classList.add('active');
+    document.getElementById(type + '-uploader').classList.add('active');
+}
+
+function hideUploader() {
+    document.getElementById('overlay-bg').classList.remove('active');
+    const uploaders = document.querySelectorAll('.uploader-container');
+    uploaders.forEach(uploader => {
+        uploader.classList.remove('active');
+    });
+}
+
+// Cerrar al hacer clic fuera
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('overlay-bg').addEventListener('click', hideUploader);
+});
+</script>
+""", unsafe_allow_html=True)
+
+# =========================
+# BOTONES PRINCIPALES
+# =========================
+st.markdown("""
+<div class="overlay">
+    <div class="upload-btn btn-text" onclick="showUploader('text')">📝 TEXT / EMAIL</div>
+    <div class="upload-btn btn-url" onclick="showUploader('url')">🔗 URL / LINK</div>
+    <div class="upload-btn btn-image" onclick="showUploader('image')">🖼️ IMAGE</div>
+    <div class="upload-btn btn-video" onclick="showUploader('video')">🎥 VIDEO</div>
+    <div class="upload-btn btn-audio" onclick="showUploader('audio')">🔊 AUDIO</div>
 </div>
 """, unsafe_allow_html=True)
+
+# =========================
+# CONTENEDOR PARA SUBIDAS (OVERLAY)
+# =========================
+st.markdown("""
+<div class="overlay-bg" id="overlay-bg"></div>
+""", unsafe_allow_html=True)
+
+# =========================
+# UPLOADERS INDIVIDUALES
+# =========================
+# Text/Email Uploader
+st.markdown("""
+<div class="uploader-container" id="text-uploader">
+    <button class="close-btn" onclick="hideUploader()">×</button>
+    <h3 style="color: #00ffff; margin-bottom: 20px;">📝 TEXT / EMAIL VERIFICATION</h3>
+""", unsafe_allow_html=True)
+
+text_input = st.text_area("Paste text or email content:", height=150)
+email_file = st.file_uploader("Or upload text/email file:", type=["txt", "eml", "msg"])
+if st.button("Verify Text/Email", key="verify_text"):
+    if text_input or email_file:
+        st.success("Text/Email submitted for verification!")
+    else:
+        st.warning("Please paste text or upload a file")
+st.markdown("</div>", unsafe_allow_html=True)
+
+# URL/Link Uploader
+st.markdown("""
+<div class="uploader-container" id="url-uploader">
+    <button class="close-btn" onclick="hideUploader()">×</button>
+    <h3 style="color: #00ffff; margin-bottom: 20px;">🔗 URL / LINK VERIFICATION</h3>
+""", unsafe_allow_html=True)
+url_input = st.text_input("Enter URL or link:")
+if st.button("Verify URL", key="verify_url"):
+    if url_input:
+        st.success(f"URL submitted: {url_input}")
+    else:
+        st.warning("Please enter a URL")
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Image Uploader
+st.markdown("""
+<div class="uploader-container" id="image-uploader">
+    <button class="close-btn" onclick="hideUploader()">×</button>
+    <h3 style="color: #00ffff; margin-bottom: 20px;">🖼️ IMAGE VERIFICATION</h3>
+""", unsafe_allow_html=True)
+image_file = st.file_uploader("Upload image:", type=["jpg", "jpeg", "png", "gif", "bmp"])
+if st.button("Verify Image", key="verify_image"):
+    if image_file:
+        st.success("Image submitted for verification!")
+    else:
+        st.warning("Please upload an image")
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Video Uploader
+st.markdown("""
+<div class="uploader-container" id="video-uploader">
+    <button class="close-btn" onclick="hideUploader()">×</button>
+    <h3 style="color: #00ffff; margin-bottom: 20px;">🎥 VIDEO VERIFICATION</h3>
+""", unsafe_allow_html=True)
+video_file = st.file_uploader("Upload video:", type=["mp4", "avi", "mov", "wmv", "flv"])
+if st.button("Verify Video", key="verify_video"):
+    if video_file:
+        st.success("Video submitted for verification!")
+    else:
+        st.warning("Please upload a video")
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Audio Uploader
+st.markdown("""
+<div class="uploader-container" id="audio-uploader">
+    <button class="close-btn" onclick="hideUploader()">×</button>
+    <h3 style="color: #00ffff; margin-bottom: 20px;">🔊 AUDIO VERIFICATION</h3>
+""", unsafe_allow_html=True)
+audio_file = st.file_uploader("Upload audio:", type=["mp3", "wav", "ogg", "m4a", "flac"])
+if st.button("Verify Audio", key="verify_audio"):
+    if audio_file:
+        st.success("Audio submitted for verification!")
+    else:
+        st.warning("Please upload an audio file")
+st.markdown("</div>", unsafe_allow_html=True)
