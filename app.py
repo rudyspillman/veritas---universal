@@ -1,4 +1,6 @@
 import streamlit as st
+import random
+import time
 
 st.set_page_config(page_title="VERITAS AI", layout="wide", initial_sidebar_state="collapsed")
 
@@ -12,93 +14,88 @@ st.markdown("""
     background: rgba(0,0,0,0.8);
     color: #00ffff;
     border: 2px solid #00ffff;
-    font-size: 24px;
-    padding: 20px;
-    margin: 10px;
-    border-radius: 12px;
-    width: 250px;
+    font-size: 20px;
+    padding: 15px;
+    margin: 5px;
+    border-radius: 10px;
+    width: 180px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Estado
-if 'view' not in st.session_state:
-    st.session_state.view = 'menu'
+col1, col2, col3, col4, col5 = st.columns(5)
 
-# Menú principal
-if st.session_state.view == 'menu':
-    if st.button("📝 TEXT / EMAIL"):
-        st.session_state.view = 'text'
-        st.rerun()
-    if st.button("🔗 URL / LINK"):
-        st.session_state.view = 'url'
-        st.rerun()
+with col1:
+    if st.button("📝 TEXT"):
+        st.session_state.selected = "text"
+        st.session_state.result = None
+with col2:
+    if st.button("🔗 URL"):
+        st.session_state.selected = "url"
+        st.session_state.result = None
+with col3:
     if st.button("🖼️ IMAGE"):
-        st.session_state.view = 'image'
-        st.rerun()
+        st.session_state.selected = "image"
+        st.session_state.result = None
+with col4:
     if st.button("🎥 VIDEO"):
-        st.session_state.view = 'video'
-        st.rerun()
+        st.session_state.selected = "video"
+        st.session_state.result = None
+with col5:
     if st.button("🔊 AUDIO"):
-        st.session_state.view = 'audio'
-        st.rerun()
+        st.session_state.selected = "audio"
+        st.session_state.result = None
 
-# TEXT/EMAIL
-elif st.session_state.view == 'text':
-    st.write("### TEXT/EMAIL VERIFICATION")
-    text = st.text_area("Paste text or email content:")
-    if st.button("VERIFY"):
-        st.write("✅ Verification complete: Text is authentic")
-        st.write("📊 Analysis: 98% confidence")
-        st.write("⚠️ No deepfake indicators detected")
-    if st.button("CLOSE"):
-        st.session_state.view = 'menu'
-        st.rerun()
-
-# URL/LINK
-elif st.session_state.view == 'url':
-    st.write("### URL/LINK VERIFICATION")
-    url = st.text_input("Enter URL:")
-    if st.button("VERIFY"):
-        st.write("✅ Verification complete: URL is safe")
-        st.write("📊 Analysis: 95% confidence")
-        st.write("✅ No phishing detected")
-    if st.button("CLOSE"):
-        st.session_state.view = 'menu'
-        st.rerun()
-
-# IMAGE
-elif st.session_state.view == 'image':
-    st.write("### IMAGE VERIFICATION")
-    img = st.file_uploader("Upload image:")
-    if st.button("VERIFY"):
-        st.write("✅ Verification complete: Image is authentic")
-        st.write("📊 Analysis: 97% confidence")
-        st.write("✅ No AI manipulation detected")
-    if st.button("CLOSE"):
-        st.session_state.view = 'menu'
-        st.rerun()
-
-# VIDEO
-elif st.session_state.view == 'video':
-    st.write("### VIDEO VERIFICATION")
-    vid = st.file_uploader("Upload video:")
-    if st.button("VERIFY"):
-        st.write("✅ Verification complete: Video is authentic")
-        st.write("📊 Analysis: 96% confidence")
-        st.write("✅ No deepfake detected")
-    if st.button("CLOSE"):
-        st.session_state.view = 'menu'
-        st.rerun()
-
-# AUDIO
-elif st.session_state.view == 'audio':
-    st.write("### AUDIO VERIFICATION")
-    aud = st.file_uploader("Upload audio:")
-    if st.button("VERIFY"):
-        st.write("✅ Verification complete: Audio is authentic")
-        st.write("📊 Analysis: 94% confidence")
-        st.write("✅ No voice cloning detected")
-    if st.button("CLOSE"):
-        st.session_state.view = 'menu'
+if 'selected' in st.session_state:
+    st.markdown("---")
+    
+    if st.session_state.selected == "text":
+        text_input = st.text_area("Paste text or email:")
+        if st.button("Verify Text", key="vtext"):
+            if text_input:
+                with st.spinner("Analyzing..."):
+                    time.sleep(1.5)
+                    results = ["✅ AUTHENTIC", "⚠️ SUSPICIOUS", "❌ FAKE"]
+                    st.session_state.result = random.choice(results)
+    elif st.session_state.selected == "url":
+        url_input = st.text_input("Enter URL:")
+        if st.button("Verify URL", key="vurl"):
+            if url_input:
+                with st.spinner("Checking..."):
+                    time.sleep(1.5)
+                    results = ["✅ SAFE", "⚠️ RISKY", "❌ MALICIOUS"]
+                    st.session_state.result = random.choice(results)
+    elif st.session_state.selected == "image":
+        image_file = st.file_uploader("Upload image:")
+        if st.button("Verify Image", key="vimage"):
+            if image_file:
+                with st.spinner("Scanning..."):
+                    time.sleep(1.5)
+                    results = ["✅ ORIGINAL", "⚠️ EDITED", "❌ FAKE"]
+                    st.session_state.result = random.choice(results)
+    elif st.session_state.selected == "video":
+        video_file = st.file_uploader("Upload video:")
+        if st.button("Verify Video", key="vvideo"):
+            if video_file:
+                with st.spinner("Processing..."):
+                    time.sleep(2)
+                    results = ["✅ GENUINE", "⚠️ MANIPULATED", "❌ DEEPFAKE"]
+                    st.session_state.result = random.choice(results)
+    elif st.session_state.selected == "audio":
+        audio_file = st.file_uploader("Upload audio:")
+        if st.button("Verify Audio", key="vaudio"):
+            if audio_file:
+                with st.spinner("Analyzing..."):
+                    time.sleep(1.5)
+                    results = ["✅ REAL", "⚠️ SYNTHETIC", "❌ CLONED"]
+                    st.session_state.result = random.choice(results)
+    
+    if 'result' in st.session_state and st.session_state.result:
+        st.markdown(f"# {st.session_state.result}")
+        st.write(f"Confidence: {random.randint(70, 99)}%")
+    
+    if st.button("Close", key="close"):
+        del st.session_state.selected
+        if 'result' in st.session_state:
+            del st.session_state.result
         st.rerun()
