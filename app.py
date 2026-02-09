@@ -38,6 +38,7 @@ st.markdown(f"""
 
 /* Botones flotantes */
 .btn {{
+    display: block;
     position: absolute;
     min-width: 220px;
     padding: 22px 26px;
@@ -51,6 +52,7 @@ st.markdown(f"""
     cursor: pointer;
     box-shadow: 0 0 18px rgba(0,255,255,0.35);
     transition: all 0.25s ease-in-out;
+    text-decoration: none !important;
 }}
 
 .btn:hover {{
@@ -62,32 +64,32 @@ st.markdown(f"""
 
 /* POSICIONAMIENTO SIMÉTRICO */
 
-/* TEXT / EMAIL (arriba derecha, alineado al haz vertical) */
+/* TEXT / EMAIL */
 #text {{
     top: 18%;
     left: 60%;
 }}
 
-/* URL / LINK (arriba izquierda, misma distancia espejo) */
+/* URL / LINK */
 #url {{
     top: 18%;
     left: 22%;
 }}
 
-/* IMAGE (centro izquierda) */
+/* IMAGE */
 #image {{
     top: 42%;
     left: 18%;
 }}
 
-/* VIDEO (centro inferior, alineado al eje) */
+/* VIDEO */
 #video {{
     top: 55%;
     left: 50%;
     transform: translateX(-50%);
 }}
 
-/* AUDIO (centro derecha, más cerca del eje) */
+/* AUDIO */
 #audio {{
     top: 42%;
     left: 64%;
@@ -96,15 +98,27 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # =========================
-# OVERLAY DE BOTONES
+# URLs para cada funcionalidad
 # =========================
-st.markdown("""
+# Reemplaza estas URLs con las tuyas
+URLS = {
+    "text": "https://tuejemplo.com/text",  # URL para texto/email
+    "url": "https://tuejemplo.com/url",    # URL para enlaces
+    "image": "https://tuejemplo.com/image", # URL para imágenes
+    "video": "https://tuejemplo.com/video", # URL para videos
+    "audio": "https://tuejemplo.com/audio"  # URL para audio
+}
+
+# =========================
+# OVERLAY DE BOTONES CON ENLACES REALES
+# =========================
+st.markdown(f"""
 <div class="overlay">
-    <div class="btn" id="text">📝 TEXT / EMAIL</div>
-    <div class="btn" id="url">🔗 URL / LINK</div>
-    <div class="btn" id="image">🖼️ IMAGE</div>
-    <div class="btn" id="video">🎥 VIDEO</div>
-    <div class="btn" id="audio">🔊 AUDIO</div>
+    <a href="{URLS['text']}" class="btn" id="text" target="_blank">📝 TEXT / EMAIL</a>
+    <a href="{URLS['url']}" class="btn" id="url" target="_blank">🔗 URL / LINK</a>
+    <a href="{URLS['image']}" class="btn" id="image" target="_blank">🖼️ IMAGE</a>
+    <a href="{URLS['video']}" class="btn" id="video" target="_blank">🎥 VIDEO</a>
+    <a href="{URLS['audio']}" class="btn" id="audio" target="_blank">🔊 AUDIO</a>
 </div>
 """, unsafe_allow_html=True)
 
