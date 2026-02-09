@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit.components.v1 import html
 
 # =========================
 # CONFIGURACIÓN GENERAL
@@ -9,12 +10,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+if "mode" not in st.session_state:
+    st.session_state.mode = None
+
 # =========================
-# CSS GLOBAL
+# CSS + JS
 # =========================
 BACKGROUND_URL = "https://i.postimg.cc/Kzv816Jc/VERITAS_AI_Universal_Verification_Engine_IMAGEN.png"
 
-st.markdown(f"""
+html(f"""
 <style>
 .stApp {{
     background-image: url("{BACKGROUND_URL}");
@@ -23,9 +27,7 @@ st.markdown(f"""
     background-attachment: fixed;
 }}
 
-#MainMenu, footer, header {{
-    visibility: hidden;
-}}
+#MainMenu, footer, header {{ visibility: hidden; }}
 
 .overlay {{
     position: relative;
@@ -47,8 +49,6 @@ st.markdown(f"""
     cursor: pointer;
     box-shadow: 0 0 18px rgba(0,255,255,0.35);
     transition: all 0.25s ease-in-out;
-    text-decoration: none;
-    display: inline-block;
 }}
 
 .btn:hover {{
@@ -58,27 +58,45 @@ st.markdown(f"""
     transform: scale(1.05);
 }}
 
-/* POSICIONES */
 #text {{ top: 18%; left: 60%; }}
 #url {{ top: 18%; left: 22%; }}
 #image {{ top: 42%; left: 18%; }}
 #video {{ top: 55%; left: 50%; transform: translateX(-50%); }}
 #audio {{ top: 42%; left: 64%; }}
 </style>
-""", unsafe_allow_html=True)
+
+<div class="overlay">
+    <div class="btn" id="text" onclick="send('text')">📝 TEXT / EMAIL</div>
+    <div class="btn" id="url" onclick="send('url')">🔗 URL / LINK</div>
+    <div class="btn" id="image" onclick="send('image')">🖼️ IMAGE</div>
+    <div class="btn" id="video" onclick="send('video')">🎥 VIDEO</div>
+    <div class="btn" id="audio" onclick="send('audio')">🔊 AUDIO</div>
+</div>
+
+<script>
+function send(value) {{
+    const streamlitDoc = window.parent.document;
+    const input = streamlitDoc.querySelector('input[data-testid="stTextInput"]');
+    input.value = value;
+    input.dispatchEvent(new Event('input', {{ bubbles: true }}));
+}}
+</script>
+""", height=900)
 
 # =========================
-# BOTONES FUNCIONALES
+# INPUT OCULTO FUNCIONAL
 # =========================
-st.markdown("""
-<div class="overlay">
-    <a href="/?mode=text" class="btn" id="text">📝 TEXT / EMAIL</a>
-    <a href="/?mode=url" class="btn" id="url">🔗 URL / LINK</a>
-    <a href="/?mode=image" class="btn" id="image">🖼️ IMAGE</a>
-    <a href="/?mode=video" class="btn" id="video">🎥 VIDEO</a>
-    <a href="/?mode=audio" class="btn" id="audio">🔊 AUDIO</a>
-</div>
-""", unsafe_allow_html=True)
+mode = st.text_input("", label_visibility="collapsed")
+
+if mode:
+    st.session_state.mode = mode
+
+# =========================
+# RESULTADO
+# =========================
+if st.session_state.mode:
+    st.success(f"MODO ACTIVO: {st.session_state.mode.upper()}")
+
 
 
 
