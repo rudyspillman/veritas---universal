@@ -29,14 +29,15 @@ st.markdown(f"""
     visibility: hidden;
 }}
 
-/* Forzar overlay */
-section.main > div {{
+/* Contenedor overlay absoluto */
+.overlay {{
     position: relative;
+    width: 100%;
     height: 90vh;
 }}
 
-/* Estilo base botones */
-div[data-testid="stButton"] > button {{
+/* Botones flotantes */
+.btn {{
     position: absolute;
     min-width: 220px;
     padding: 22px 26px;
@@ -52,40 +53,62 @@ div[data-testid="stButton"] > button {{
     transition: all 0.25s ease-in-out;
 }}
 
-div[data-testid="stButton"] > button:hover {{
+.btn:hover {{
     background: #00ffff;
     color: #000;
     box-shadow: 0 0 28px #00ffff;
     transform: scale(1.05);
 }}
 
-/* POSICIONES */
-#btn-text button {{ top: 18%; left: 60%; }}
-#btn-url button {{ top: 18%; left: 22%; }}
-#btn-image button {{ top: 42%; left: 18%; }}
-#btn-video button {{ top: 55%; left: 50%; transform: translateX(-50%); }}
-#btn-audio button {{ top: 42%; left: 64%; }}
+/* POSICIONAMIENTO SIMÉTRICO */
+
+/* TEXT / EMAIL (arriba derecha, alineado al haz vertical) */
+#text {{
+    top: 18%;
+    left: 60%;
+}}
+
+/* URL / LINK (arriba izquierda, misma distancia espejo) */
+#url {{
+    top: 18%;
+    left: 22%;
+}}
+
+/* IMAGE (centro izquierda) */
+#image {{
+    top: 42%;
+    left: 18%;
+}}
+
+/* VIDEO (centro inferior, alineado al eje) */
+#video {{
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+}}
+
+/* AUDIO (centro derecha, más cerca del eje) */
+#audio {{
+    top: 42%;
+    left: 64%;
+}}
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# BOTONES FUNCIONALES
+# OVERLAY DE BOTONES
 # =========================
+st.markdown("""
+<div class="overlay">
+    <div class="btn" id="text">📝 TEXT / EMAIL</div>
+    <div class="btn" id="url">🔗 URL / LINK</div>
+    <div class="btn" id="image">🖼️ IMAGE</div>
+    <div class="btn" id="video">🎥 VIDEO</div>
+    <div class="btn" id="audio">🔊 AUDIO</div>
+</div>
+""", unsafe_allow_html=True)
 
-if st.button("📝 TEXT / EMAIL", key="btn-text"):
-    st.success("TEXT / EMAIL ACTIVADO")
 
-if st.button("🔗 URL / LINK", key="btn-url"):
-    st.success("URL / LINK ACTIVADO")
-
-if st.button("🖼️ IMAGE", key="btn-image"):
-    st.success("IMAGE ACTIVADO")
-
-if st.button("🎥 VIDEO", key="btn-video"):
-    st.success("VIDEO ACTIVADO")
-
-if st.button("🔊 AUDIO", key="btn-audio"):
-    st.success("AUDIO ACTIVADO")
 
 
 
